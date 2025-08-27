@@ -1,16 +1,21 @@
 import WebApp from "@twa-dev/sdk";
 
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import reactLogo from "./1shared/icons/react.svg";
+import viteLogo from "./1shared/icons/vite.svg";
 
 import "./App.css";
 import { useStore } from "./app/store";
 import { observer } from "mobx-react-lite";
+import { Button } from "./1shared/ui/Button";
 
 export const App = observer(() => {
   const { counter } = useStore();
 
   const count = counter.get();
+
+  const alertCount = () => WebApp.showAlert(`Hello World! Current count is ${count}`);
+
+  const closeApp = () => WebApp.close();
 
   return (
     <>
@@ -31,7 +36,8 @@ export const App = observer(() => {
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
       <div className="card">
-        <button onClick={() => WebApp.showAlert(`Hello World! Current count is ${count}`)}>Show Alert</button>
+        <button onClick={alertCount}>Show Alert</button>
+        <Button label="закрыть" handleClick={closeApp} />
       </div>
     </>
   );
