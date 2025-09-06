@@ -1,69 +1,141 @@
-# React + TypeScript + Vite
+# Telegram Mini Apps Next.js Template
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This template demonstrates how developers can implement a web application on the
+Telegram Mini Apps platform using the following technologies and libraries:
 
-Currently, two official plugins are available:
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [TON Connect](https://docs.ton.org/develop/dapps/ton-connect/overview)
+- [@telegram-apps SDK](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x)
+- [Telegram UI](https://github.com/Telegram-Mini-Apps/TelegramUI)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> The template was created using [pnpm](https://pnpm.io/). Therefore, it is
+> required to use it for this project as well. Using other package managers, you
+> will receive a corresponding error.
 
-## Expanding the ESLint configuration
+## Install Dependencies
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules: 
+If you have just cloned this template, you should install the project
+dependencies using the command:
 
-```js
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```Bash
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+This project contains the following scripts:
 
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+- `dev`. Runs the application in development mode.
+- `dev:https`. Runs the application in development mode using self-signed SSL
+  certificate.
+- `build`. Builds the application for production.
+- `start`. Starts the Next.js server in production mode.
+- `lint`. Runs [eslint](https://eslint.org/) to ensure the code quality meets
+  the required
+  standards.
+
+To run a script, use the `pnpm run` command:
+
+```Bash
+pnpm run {script}
+# Example: pnpm run build
 ```
+
+## Create Bot and Mini App
+
+Before you start, make sure you have already created a Telegram Bot. Here is
+a [comprehensive guide](https://docs.telegram-mini-apps.com/platform/creating-new-app)
+on how to do it.
+
+## Run
+
+Although Mini Apps are designed to be opened
+within [Telegram applications](https://docs.telegram-mini-apps.com/platform/about#supported-applications),
+you can still develop and test them outside of Telegram during the development
+process.
+
+To run the application in the development mode, use the `dev` script:
+
+```bash
+pnpm run dev
+```
+
+After this, you will see a similar message in your terminal:
+
+```bash
+▲ Next.js 14.2.3
+- Local:        http://localhost:3000
+
+✓ Starting...
+✓ Ready in 2.9s
+```
+
+To view the application, you need to open the `Local`
+link (`http://localhost:3000` in this example) in your browser.
+
+It is important to note that some libraries in this template, such as
+`@telegram-apps/sdk`, are not intended for use outside of Telegram.
+
+Nevertheless, they appear to function properly. This is because the
+`src/hooks/useTelegramMock.ts` file, which is imported in the application's
+`Root` component, employs the `mockTelegramEnv` function to simulate the
+Telegram environment. This trick convinces the application that it is
+running in a Telegram-based environment. Therefore, be cautious not to use this
+function in production mode unless you fully understand its implications.
+
+### Run Inside Telegram
+
+Although it is possible to run the application outside of Telegram, it is
+recommended to develop it within Telegram for the most accurate representation
+of its real-world functionality.
+
+To run the application inside Telegram, [@BotFather](https://t.me/botfather)
+requires an HTTPS link.
+
+This template already provides a solution.
+
+To retrieve a link with the HTTPS protocol, consider using the `dev:https`
+script:
+
+```bash
+$ pnpm run dev:https
+
+▲ Next.js 14.2.3
+- Local:        https://localhost:3000
+
+✓ Starting...
+✓ Ready in 2.4s
+```
+
+Visiting the `Local` link (`https://localhost:3000` in this example) in your
+browser, you will see the following warning:
+
+![SSL Warning](assets/ssl-warning.png)
+
+This browser warning is normal and can be safely ignored as long as the site is
+secure. Click the `Proceed to localhost (unsafe)` button to continue and view
+the application.
+
+Once the application is displayed correctly, submit the
+link `https://127.0.0.1:3000` (`https://localhost:3000` is considered as invalid
+by BotFather) as the Mini App link to [@BotFather](https://t.me/botfather).
+Then, navigate to [https://web.telegram.org/k/](https://web.telegram.org/k/),
+find your bot, and launch the Telegram Mini App. This approach provides the full
+development experience.
+
+## Deploy
+
+The easiest way to deploy your Next.js app is to use
+the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
+from the creators of Next.js.
+
+Check out
+the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for
+more details.
+
+## Useful Links
+
+- [Platform documentation](https://docs.telegram-mini-apps.com/)
+- [@telegram-apps/sdk-react documentation](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react)
+- [Telegram developers community chat](https://t.me/devs)
