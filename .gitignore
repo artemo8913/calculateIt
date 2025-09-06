@@ -27,3 +27,5 @@ dist-ssr
 #secret folder
 /secret
 .env
+
+certificates
