@@ -1,16 +1,22 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic"
 
-export const fetchCache = 'force-no-store'
+export const fetchCache = "force-no-store"
 
-import { Bot, webhookCallback } from 'grammy'
+import { Bot, webhookCallback } from "grammy"
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 
-if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.')
+if (!token) {
+    throw new Error("TELEGRAM_BOT_TOKEN environment variable not found.");
+}
+
+if (process.env.NODE_ENV === "development") {
+    throw new Error("Telegram bot can't run as api route in development mod");
+}
 
 const bot = new Bot(token);
 
-bot.command('start', async (ctx) => {
+bot.command("start", async (ctx) => {
     const message_id = ctx.message?.message_id;
 
     let reply_parameters;
@@ -33,9 +39,9 @@ bot.on("edited_message", async (ctx) => {
     await ctx.reply(`${ctx.editedMessage.message_id}`);
 });
 
-bot.on('message:text', async (ctx) => {
-    if (ctx.message.text === 'html') {
-        await ctx.reply('<b>Привет!</b> <i>Добро пожаловать</i> в <a href="https://grammy.dev">grammY</a>.', { parse_mode: 'HTML' })
+bot.on("message:text", async (ctx) => {
+    if (ctx.message.text === "html") {
+        await ctx.reply("<b>Привет!</b> <i>Добро пожаловать</i> в <a href=\"https://grammy.dev\">grammY</a>.", { parse_mode: "HTML" })
     }
 });
 
@@ -52,7 +58,7 @@ bot.on("message:entities", async (ctx) => {
     // Получать сущности которые являются электронной почтой и номером телефона
     const phonesAndEmails = ctx.entities(["email", "phone_number"]);
 
-    await ctx.reply(`${phonesAndEmails.join(',')}`)
+    await ctx.reply(`${phonesAndEmails.join(",")}`)
 
 });
 
@@ -63,8 +69,8 @@ bot.on("message_reaction", async (ctx) => {
     }
 });
 
-bot.on('message:text', async (ctx) => {
+bot.on("message:text", async (ctx) => {
     await ctx.reply(ctx.message.text)
 });
 
-export const POST = webhookCallback(bot, 'std/http')
+export const POST = webhookCallback(bot, "std/http")
