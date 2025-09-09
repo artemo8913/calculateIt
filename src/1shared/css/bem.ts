@@ -1,10 +1,10 @@
 import { classNames, isRecord } from './classnames';
 
-export interface BlockFn {
+interface BlockFn {
   (...mods: any): string;
 }
 
-export interface ElemFn {
+interface ElemFn {
   (elem: string, ...mods: any): string;
 }
 
