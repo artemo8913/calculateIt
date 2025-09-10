@@ -8,7 +8,9 @@
     "dev:bot": "ts-node ./test/devTgBot",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "npx drizzle-kit migrate"
   },
   "dependencies": {
     "@telegram-apps/sdk-react": "^3.2.4",
