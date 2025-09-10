@@ -1,9 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { accountsTable } from './model/accounts.schema';
-import { categoriesTable } from './model/categories.schema';
-import { tagsTable } from './model/tags.schema';
-import { transactionsTable } from './model/transactions.schema';
+import { accountsTable, categoriesTable, tagsTable, transactionsTable } from './model';
 
 if (!process.env.DATABASE_URL) {
     throw new Error("ENV DATABASE_URL don't exist")
@@ -21,3 +18,4 @@ const db = drizzle({
 });
 
 export default db;
+export { accountsTable, categoriesTable, tagsTable, transactionsTable };
