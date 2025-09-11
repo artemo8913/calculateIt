@@ -7,13 +7,14 @@ import { webhookCallback } from "grammy";
 import { createBot } from "@/telegram";
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
+const isProd = process.env.NODE_ENV === "production";
 
 if (!token) {
     throw new Error("TELEGRAM_BOT_TOKEN environment variable not found.");
 }
 
-if (process.env.NODE_ENV === "development") {
-    throw new Error("Telegram bot (webhook) can't run as api route in development mod");
+if (!isProd) {
+    throw new Error("Webhook in not prod mode is not available");
 }
 
 const bot = createBot(token);
