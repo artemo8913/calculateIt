@@ -4,6 +4,6 @@ export const accountsTable = pgTable("Accounts", {
     tgId: text().notNull(),
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: text().notNull(),
-    value: numeric({ precision: 14, scale: 2 }),
-    isPrimary: boolean()
+    value: numeric({ precision: 14, scale: 2 }).default("0"),
+    isPrimary: boolean().default(false)
 });
