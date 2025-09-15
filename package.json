@@ -5,7 +5,7 @@
   "scripts": {
     "dev:next": "next dev",
     "dev:https": "next dev --experimental-https",
-    "dev:bot": "tsx --env-file=.env.local ./tests/dev-bot.ts",
+    "dev:bot": "tsx watch --clear-screen=false --env-file=.env.local ./tests/dev-bot.ts",
     "dev": "concurrently \"npm run dev:https\" \"npm run dev:bot\"",
     "build": "next build",
     "start": "next start",
@@ -14,6 +14,8 @@
     "db:migrate": "npx drizzle-kit migrate"
   },
   "dependencies": {
+    "@grammyjs/conversations": "^2.1.0",
+    "@grammyjs/menu": "^1.3.1",
     "@telegram-apps/sdk-react": "^3.2.4",
     "@telegram-apps/telegram-ui": "^2.1.5",
     "@tonconnect/ui-react": "^2.1.0",
