@@ -1,0 +1,1 @@
+export { accountDBService } from "./model/accounts.model";
