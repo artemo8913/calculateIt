@@ -2,8 +2,10 @@ import { eq } from "drizzle-orm";
 
 import db, { accountsTable } from "@/1shared/database";
 
+type AccountDBInsert = typeof accountsTable.$inferInsert;
+
 class AccountDBService {
-    async createAccount(account: typeof accountsTable.$inferInsert) {
+    async createAccount(account: AccountDBInsert) {
         try {
             return await db.insert(accountsTable).values(account);
         } catch (e) {
@@ -28,7 +30,7 @@ class AccountDBService {
         }
     }
 
-    async updateAccount(id: number, account: Partial<typeof accountsTable.$inferInsert>) {
+    async updateAccount(id: number, account: Partial<AccountDBInsert>) {
         try {
             return await db.update(accountsTable).set(account).where(eq(accountsTable.id, id));
         } catch (e) {
