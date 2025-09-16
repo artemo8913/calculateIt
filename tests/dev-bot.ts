@@ -1,13 +1,14 @@
 import { createBot } from '@/telegram';
 
 const token = process.env.TELEGRAM_DEV_BOT_TOKEN;
-const isDev = process.env.NODE_ENV === "development";
+const mode = process.env.NODE_ENV
+const isDev = mode === "development";
 
 if (!token) {
     throw new Error("TELEGRAM_DEV_BOT_TOKEN is not set");
 }
 
-if (!isDev) {
+if (mode && !isDev) {
     throw new Error("Long polling in not dev mode is not available");
 }
 
