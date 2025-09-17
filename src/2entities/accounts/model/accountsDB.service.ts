@@ -4,7 +4,7 @@ import db, { accountsTable } from "@/1shared/database";
 
 type AccountDBInsert = typeof accountsTable.$inferInsert;
 
-class AccountDBService {
+class AccountsDBService {
     async createAccount(account: AccountDBInsert) {
         try {
             return await db.insert(accountsTable).values(account);
@@ -47,4 +47,4 @@ class AccountDBService {
     }
 }
 
-export const accountDBService = new AccountDBService();
+export const accountsDBService = new AccountsDBService();
