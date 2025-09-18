@@ -1,19 +1,26 @@
 import { Conversation } from "@grammyjs/conversations";
 
-import { BotContext } from "@/1shared/bot";
+import { BotContext, buildBackMenu } from "@/1shared/bot";
 
 import { accountsDBService } from "../model/accountsDB.service";
+import { buildAccountsMainMenuClone } from "./menus";
 
 export async function createAccount(conversation: Conversation<BotContext, BotContext>, ctx: BotContext) {
-    await ctx.reply("Введите наименование счета:");
+    const accountsMainMenuClone = buildAccountsMainMenuClone(conversation);
 
-    const { from, message } = await conversation.waitFor("message:text");
+    const backMenu = buildBackMenu(conversation, "accountsMainMenu");
 
-    if (!message.text) {
-        return await ctx.reply(`Не верное наименование`);
+    await ctx.editMessageText("Введите наименование счета:", { reply_markup: backMenu });
+
+    const name = await conversation.form.text();
+
+    if (!name || !ctx.from) {
+        return await ctx.editMessageText(`Не верное наименование`, { reply_markup: backMenu });
     }
 
-    await conversation.external(() => accountsDBService.createAccount({ name: message.text, tgId: String(from.id) }));
-    await ctx.editMessageText(`Счет с наименование ${message.text} создан`);
-    await ctx.deleteMessage();
+    await conversation.external(() => accountsDBService.createAccount({ name, tgId: String(ctx.from!.id) }));
+
+    await ctx.editMessageText(`Счет с наименованием ${name} создан`);
+
+    await ctx.editMessageText("Главное меню", { reply_markup: accountsMainMenuClone });
 }

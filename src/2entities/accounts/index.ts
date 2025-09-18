@@ -1,2 +1,2 @@
 export type { Account } from "./model/accounts.types";
-export { accountsComposer } from "./bot";
+export { accountsComposer, accountsMainMenu } from "./bot";

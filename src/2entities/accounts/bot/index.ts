@@ -13,4 +13,4 @@ accountsMainMenu.register(selectAccountMenu);
 accountsMainMenu.register(deleteAccountMenu);
 accountsComposer.use(accountsMainMenu);
 
-export { accountsComposer };
+export { accountsComposer, accountsMainMenu };
