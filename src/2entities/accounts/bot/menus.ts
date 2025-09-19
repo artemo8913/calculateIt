@@ -1,12 +1,12 @@
-import { Menu, MenuRange } from "@grammyjs/menu";
+import { Menu, MenuRange, MenuFlavor } from "@grammyjs/menu";
+import { Conversation } from "@grammyjs/conversations";
 
 import { BotContext } from "@/1shared/bot";
 
 import { Account } from "../model/accounts.types";
 import { accountsDBService } from "../model/accountsDB.service";
-import { Conversation } from "@grammyjs/conversations";
 
-function buildAccountMenu(name: string, callback: (acc: Account) => Promise<unknown> | unknown) {
+function buildAccountMenu(name: string, callback: (ctx: BotContext & MenuFlavor, acc: Account) => Promise<unknown> | unknown) {
     return new Menu<BotContext>(name)
         .dynamic(async (ctx) => {
             const range = new MenuRange<BotContext>();
@@ -14,8 +14,7 @@ function buildAccountMenu(name: string, callback: (acc: Account) => Promise<unkn
             const accounts = await accountsDBService.getAllAccounts(String(ctx.from?.id));
 
             accounts.forEach(acc => range.text(`${acc.name} ${acc.value}Р`, async (ctx) => {
-                await callback(acc);
-                ctx.menu.update();
+                await callback(ctx, acc);
             }).row());
             return range;
         })
@@ -40,8 +39,13 @@ const buildAccountsMainMenuClone = (conversation: Conversation<BotContext, BotCo
         .back("Назад");
 }
 
-const selectAccountMenu = buildAccountMenu("selectAccountMenu", () => { });
+const selectAccountMenu = buildAccountMenu("selectAccountMenu", (ctx) => {
+    ctx.menu.update();
+});
 
-const deleteAccountMenu = buildAccountMenu("deleteAccountMenu", async (acc) => await accountsDBService.deleteAccount(acc.id));
+const deleteAccountMenu = buildAccountMenu("deleteAccountMenu", async (ctx, acc) => {
+    await accountsDBService.deleteAccount(acc.id);
+    ctx.menu.update();
+});
 
-export { accountsMainMenu, selectAccountMenu, deleteAccountMenu, buildAccountsMainMenuClone };
+export { accountsMainMenu, selectAccountMenu, deleteAccountMenu, buildAccountMenu, buildAccountsMainMenuClone };
