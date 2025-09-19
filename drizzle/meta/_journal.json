@@ -15,6 +15,13 @@
       "when": 1757669259043,
       "tag": "0001_loud_kabuki",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758291172189,
+      "tag": "0002_chilly_butterfly",
+      "breakpoints": true
     }
   ]
 }
