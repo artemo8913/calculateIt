@@ -2,10 +2,10 @@ import { and, eq, lte, gte, SQL } from "drizzle-orm";
 
 import db, { transactionsTable } from "@/1shared/database";
 
-import { Transaction } from "./transactions.types";
+type TransactionsDBInsert = typeof transactionsTable.$inferInsert;
 
-class TransactionDBService {
-    async createTransaction(transaction: Transaction) {
+class TransactionsDBService {
+    async createTransaction(transaction: TransactionsDBInsert) {
         try {
             return await db.insert(transactionsTable).values(transaction);
         } catch (e) {
@@ -41,7 +41,7 @@ class TransactionDBService {
         }
     }
 
-    async updateTransaction(id: number, transaction: Partial<Transaction>) {
+    async updateTransaction(id: number, transaction: Partial<TransactionsDBInsert>) {
         try {
             return await db.update(transactionsTable).set(transaction).where(eq(transactionsTable.id, id));
         } catch (e) {
@@ -58,4 +58,4 @@ class TransactionDBService {
     }
 }
 
-export const transactionDBService = new TransactionDBService();
+export const transactionsDBService = new TransactionsDBService();
