@@ -24,7 +24,7 @@ function buildAccountMenu(name: string, callback: (ctx: BotContext & MenuFlavor,
 const accountsMainMenu = new Menu<BotContext>("accountsMainMenu")
     .submenu("Посмотреть все", "selectAccountMenu").row()
     .submenu("Удалить счет", "deleteAccountMenu").row()
-    .text("Добавить счет", (ctx) => ctx.conversation.enter("createAccount")).row()
+    .text("Добавить счет", (ctx) => ctx.conversation.enter("createAccountConversation")).row()
     .text("Переименовать счет").row()
     .text("Перенести затраты со счета на счет").row()
     .back("Назад");
@@ -48,4 +48,10 @@ const deleteAccountMenu = buildAccountMenu("deleteAccountMenu", async (ctx, acc)
     ctx.menu.update();
 });
 
-export { accountsMainMenu, selectAccountMenu, deleteAccountMenu, buildAccountMenu, buildAccountsMainMenuClone };
+export {
+    accountsMainMenu,
+    selectAccountMenu,
+    deleteAccountMenu,
+    buildAccountMenu,
+    buildAccountsMainMenuClone
+};

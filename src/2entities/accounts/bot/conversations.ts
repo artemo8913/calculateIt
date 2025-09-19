@@ -5,7 +5,7 @@ import { BotContext, buildBackMenu } from "@/1shared/bot";
 import { accountsDBService } from "../model/accountsDB.service";
 import { buildAccountsMainMenuClone } from "./menus";
 
-export async function createAccount(conversation: Conversation<BotContext, BotContext>, ctx: BotContext) {
+export async function createAccountConversation(conversation: Conversation<BotContext, BotContext>, ctx: BotContext) {
     const accountsMainMenuClone = buildAccountsMainMenuClone(conversation);
 
     const backMenu = buildBackMenu(conversation, "accountsMainMenu");
