@@ -1,11 +1,12 @@
 import { Bot, session } from "grammy";
 import { Menu } from "@grammyjs/menu";
-import { conversations } from "@grammyjs/conversations";
+import { conversations, createConversation } from "@grammyjs/conversations";
 
 import { BotContext, getInitialStore } from "@/1shared/bot";
 import { BOT_STARTUP_COMMANDS, BOT_START } from "@/1shared/bot/commands";
-import { accountsComposer, accountsMainMenu } from "@/2entities/accounts";
+import { accountsComposer, accountsMainMenu, createAccountConversation } from "@/2entities/accounts";
 import { transactionComposer, transactionMainMenu } from "@/2entities/transactions";
+import { categoriesComposer, categoriesMainMenu, createCategoryConversation } from "@/2entities/categories";
 
 
 export function createBot(token: string) {
@@ -22,16 +23,21 @@ export function createBot(token: string) {
     bot.api.setMyCommands(BOT_STARTUP_COMMANDS);
 
     const mainMenu = new Menu<BotContext>("mainMenu")
-        .submenu("Категории", "categories").row()
+        .submenu("Категории", "categoriesMainMenu").row()
         .submenu("Счета", "accountsMainMenu").row()
         .text("ТЕКСТ", (ctx) => ctx.reply("ТЕКСТ!")).row();
 
     // Порядок подключения важен
     mainMenu.register(accountsMainMenu);
+    mainMenu.register(categoriesMainMenu);
     mainMenu.register(transactionMainMenu);
+
     bot.use(session({ initial: getInitialStore }));
     bot.use(conversations());
+    bot.use(createConversation(createAccountConversation));
+    bot.use(createConversation(createCategoryConversation));
     bot.use(accountsComposer);
+    bot.use(categoriesComposer);
     bot.use(transactionComposer);
     bot.use(mainMenu);
 
