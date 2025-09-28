@@ -24,6 +24,8 @@ export function createBot(token: string) {
     bot.use(createConversation(createAdviceConversation));
     bot.use(thoughtsComposer);
 
+    bot.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });
+
     bot.command([BOT_START.command, BOT_INFO.command], async (ctx) => {
         await ctx.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });
         await ctx.reply(BOT_TEXT.greeting)
