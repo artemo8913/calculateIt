@@ -18,8 +18,6 @@ export async function createBot(token: string) {
         ctx.answerCallbackQuery().catch(() => { });
     });
 
-    await bot.api.setMyCommands(BOT_STARTUP_COMMANDS);
-
     bot.use(session({ initial: getInitialStore }));
     bot.use(conversations());
     bot.use(createConversation(createThoughtsConversation));
@@ -27,7 +25,8 @@ export async function createBot(token: string) {
     bot.use(thoughtsComposer);
 
     bot.command([BOT_START.command, BOT_INFO.command], async (ctx) => {
-        ctx.reply(BOT_TEXT.greeting)
+        await ctx.api.setMyCommands(BOT_STARTUP_COMMANDS);
+        await ctx.reply(BOT_TEXT.greeting)
     });
 
     return bot;
