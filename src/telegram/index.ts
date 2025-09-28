@@ -1,0 +1,34 @@
+import { Bot, session } from "grammy";
+import { conversations, createConversation } from "@grammyjs/conversations";
+
+import { BotContext, getInitialStore } from "@/1shared/bot";
+import { BOT_STARTUP_COMMANDS, BOT_START, BOT_INFO } from "@/1shared/bot/commands";
+import { thoughtsComposer, createThoughtsConversation, createAdviceConversation } from "@/2entities/thoughts";
+import { BOT_TEXT } from "./text";
+
+
+export function createBot(token: string) {
+    const bot = new Bot<BotContext>(token);
+
+    bot.catch((err) => {
+        const ctx = err.ctx;
+        console.error(`Error while handling update ${ctx.update.update_id}:`, err);
+
+        // Отвечаем на callback query чтобы убрать "часики" на кнопке
+        ctx.answerCallbackQuery().catch(() => { });
+    });
+
+    bot.api.setMyCommands(BOT_STARTUP_COMMANDS);
+
+    bot.use(session({ initial: getInitialStore }));
+    bot.use(conversations());
+    bot.use(createConversation(createThoughtsConversation));
+    bot.use(createConversation(createAdviceConversation));
+    bot.use(thoughtsComposer);
+
+    bot.command([BOT_START.command, BOT_INFO.command], async (ctx) => {
+        ctx.reply(BOT_TEXT.greeting)
+    });
+
+    return bot;
+}

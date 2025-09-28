@@ -134,6 +134,14 @@ Check out
 the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for
 more details.
 
+## Set the API Route as Telegram Bot Webhook
+
+To configure Telegram to invoke the `/api/bot` route to respond to user interactions with your bot, run the following command after updating it with your **Telegram Bot Token** and **Vercel Deployment URL**.
+
+```bash
+curl https://api.telegram.org/bot<telegram_bot_token>/setWebhook?url=https://<your-deployment.vercel>.app/api/bot
+```
+
 ## Useful Links
 
 - [Platform documentation](https://docs.telegram-mini-apps.com/)

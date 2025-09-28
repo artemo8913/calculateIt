@@ -1,76 +1,22 @@
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
-export const fetchCache = "force-no-store"
+export const fetchCache = "force-no-store";
 
-import { Bot, webhookCallback } from "grammy"
+import { webhookCallback } from "grammy";
+
+import { createBot } from "@/telegram";
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
+const isProd = process.env.NODE_ENV === "production";
 
 if (!token) {
     throw new Error("TELEGRAM_BOT_TOKEN environment variable not found.");
 }
 
-if (process.env.NODE_ENV === "development") {
-    throw new Error("Telegram bot can't run as api route in development mod");
+if (!isProd) {
+    throw new Error("Webhook in not prod mode is not available");
 }
 
-const bot = new Bot(token);
-
-bot.command("start", async (ctx) => {
-    const message_id = ctx.message?.message_id;
-
-    let reply_parameters;
-
-    if (message_id) {
-        reply_parameters = { message_id }
-    }
-
-
-    await ctx.reply(`Привет! Это приложение для подсчета чего-либо. id = ${ctx.message?.chat.id}`,
-        {
-            reply_parameters
-        })
-});
-
-bot.on("edited_message", async (ctx) => {
-    // Получите новый, отредактированный текст сообщения.
-    const editedText = ctx.editedMessage.text;
-
-    await ctx.reply(`${ctx.editedMessage.message_id}`);
-});
-
-bot.on("message:text", async (ctx) => {
-    if (ctx.message.text === "html") {
-        await ctx.reply("<b>Привет!</b> <i>Добро пожаловать</i> в <a href=\"https://grammy.dev\">grammY</a>.", { parse_mode: "HTML" })
-    }
-});
-
-bot.on("message:entities", async (ctx) => {
-    // Получите все сущности.
-    const entities = ctx.entities();
-
-    // Получите текст первой сущности.
-    entities[0].text;
-
-    // Получать сущности которые являются электронной почтой
-    const emails = ctx.entities("email");
-
-    // Получать сущности которые являются электронной почтой и номером телефона
-    const phonesAndEmails = ctx.entities(["email", "phone_number"]);
-
-    await ctx.reply(`${phonesAndEmails.join(",")}`)
-
-});
-
-bot.on("message_reaction", async (ctx) => {
-    const { emojiAdded } = ctx.reactions();
-    if (emojiAdded.includes("🎉")) {
-        await ctx.reply("вечеринОчка :D");
-    }
-});
-
-bot.on("message:text", async (ctx) => {
-    await ctx.reply(ctx.message.text)
-});
+const bot = createBot(token);
 
 export const POST = webhookCallback(bot, "std/http")
