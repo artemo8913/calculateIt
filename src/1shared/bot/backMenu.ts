@@ -2,10 +2,10 @@ import { Conversation } from "@grammyjs/conversations";
 
 import { BotContext } from "./bot.types";
 
-export const buildBackMenu = (conversation: Conversation<BotContext, BotContext>, toMenu: string) => {
+export const buildCancelMenu = (conversation: Conversation<BotContext, BotContext>) => {
     return conversation.menu()
-        .text("назад", async (ctx) => {
-            await ctx.menu.nav(toMenu, { immediate: true });
+        .text("отмена", async (ctx) => {
+            await ctx.deleteMessage();
             await conversation.halt();
         });
 }

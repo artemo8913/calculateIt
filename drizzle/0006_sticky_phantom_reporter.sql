@@ -1,0 +1,1 @@
+ALTER TABLE "Thoughts" RENAME COLUMN "thoughts" TO "thought";

@@ -1,0 +1,1 @@
+ALTER TABLE "Thoughts" ADD COLUMN "advice" text DEFAULT '' NOT NULL;
