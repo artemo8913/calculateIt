@@ -17,6 +17,6 @@ if (!isProd) {
     throw new Error("Webhook in not prod mode is not available");
 }
 
-const bot = createBot(token);
+const bot = await createBot(token);
 
 export const POST = webhookCallback(bot, "std/http")

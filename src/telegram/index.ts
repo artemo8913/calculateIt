@@ -7,7 +7,7 @@ import { thoughtsComposer, createThoughtsConversation, createAdviceConversation 
 import { BOT_TEXT } from "./text";
 
 
-export function createBot(token: string) {
+export async function createBot(token: string) {
     const bot = new Bot<BotContext>(token);
 
     bot.catch((err) => {
@@ -18,7 +18,7 @@ export function createBot(token: string) {
         ctx.answerCallbackQuery().catch(() => { });
     });
 
-    bot.api.setMyCommands(BOT_STARTUP_COMMANDS);
+    await bot.api.setMyCommands(BOT_STARTUP_COMMANDS);
 
     bot.use(session({ initial: getInitialStore }));
     bot.use(conversations());
