@@ -12,7 +12,7 @@ if (mode && !isDev) {
     throw new Error("Long polling in not dev mode is not available");
 }
 
-const bot = await createBot(token);
+const bot = createBot(token);
 
 // Запускаем бота в режиме Long Polling
 bot.start();

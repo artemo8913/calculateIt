@@ -7,7 +7,7 @@ import { thoughtsComposer, createThoughtsConversation, createAdviceConversation 
 import { BOT_TEXT } from "./text";
 
 
-export async function createBot(token: string) {
+export function createBot(token: string) {
     const bot = new Bot<BotContext>(token);
 
     bot.catch((err) => {
@@ -25,7 +25,7 @@ export async function createBot(token: string) {
     bot.use(thoughtsComposer);
 
     bot.command([BOT_START.command, BOT_INFO.command], async (ctx) => {
-        await ctx.api.setMyCommands(BOT_STARTUP_COMMANDS);
+        await ctx.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });
         await ctx.reply(BOT_TEXT.greeting)
     });
 
