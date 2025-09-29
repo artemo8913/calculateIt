@@ -34,6 +34,10 @@ class ThoughtsDBService {
         try {
             const ids = await db.select({ id: thoughtsTable.id }).from(thoughtsTable).where(eq(thoughtsTable.tgId, tgId));
 
+            if (ids.length === 0) {
+                return;
+            }
+
             const choosedIndex = Math.floor(ids.length * Math.random());
 
             const choosedThoughtId = ids[choosedIndex].id;

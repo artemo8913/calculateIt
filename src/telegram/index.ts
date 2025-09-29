@@ -18,16 +18,17 @@ export function createBot(token: string) {
         ctx.answerCallbackQuery().catch(() => { });
     });
 
-    bot.api.setMyCommands(BOT_STARTUP_COMMANDS);
-
     bot.use(session({ initial: getInitialStore }));
     bot.use(conversations());
     bot.use(createConversation(createThoughtsConversation));
     bot.use(createConversation(createAdviceConversation));
     bot.use(thoughtsComposer);
 
+    bot.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });
+
     bot.command([BOT_START.command, BOT_INFO.command], async (ctx) => {
-        ctx.reply(BOT_TEXT.greeting)
+        await ctx.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });
+        await ctx.reply(BOT_TEXT.greeting)
     });
 
     return bot;
