@@ -2,9 +2,11 @@ import { Bot, session } from "grammy";
 import { conversations, createConversation } from "@grammyjs/conversations";
 
 import { BotContext, getInitialStore } from "@/1shared/bot";
-import { BOT_STARTUP_COMMANDS, BOT_START, BOT_INFO } from "@/1shared/bot/commands";
+import { BOT_STARTUP_COMMANDS, BOT_START, BOT_INFO, BOT_EXPORT_DB } from "@/1shared/bot/commands";
 import { thoughtsComposer, createThoughtsConversation, createAdviceConversation } from "@/2entities/thoughts";
+
 import { BOT_TEXT } from "./text";
+import { exportDatabase } from "./exportDatabase";
 
 
 export function createBot(token: string) {
@@ -30,6 +32,8 @@ export function createBot(token: string) {
         await ctx.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });
         await ctx.reply(BOT_TEXT.greeting)
     });
+
+    bot.command(BOT_EXPORT_DB.command, exportDatabase);
 
     return bot;
 }
