@@ -3,7 +3,7 @@ import ExcelJS from "exceljs";
 import { InputFile } from "grammy";
 
 import { BotContext } from "@/1shared/bot";
-import db, { thoughtsTable } from "@/1shared/database";
+import db, { thoughtsTable, anxietiesTable, thanksTable } from "@/1shared/database";
 
 const EXPORT_PATH = "./export";
 
@@ -13,13 +13,17 @@ export async function exportDatabase(ctx: BotContext) {
     }
     const workbook = new ExcelJS.Workbook();
 
-    const [thoughts] = await Promise.all([
-        db.select().from(thoughtsTable)
+    const [thoughts, anxieties, thanks] = await Promise.all([
+        db.select().from(thoughtsTable),
+        db.select().from(anxietiesTable),
+        db.select().from(thanksTable),
     ]);
 
     const filePath = `${EXPORT_PATH}/${ctx.from.id}.xlsx`;
 
     workbook.addWorksheet("thoughts").addRows(thoughts.map(Object.values));
+    workbook.addWorksheet("anxieties").addRows(anxieties.map(Object.values));
+    workbook.addWorksheet("thanks").addRows(thanks.map(Object.values));
 
     if (!fs.existsSync(EXPORT_PATH)) {
         fs.mkdirSync(EXPORT_PATH);
