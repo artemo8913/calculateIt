@@ -3,8 +3,9 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 
 import { BotContext, getInitialStore } from "@/1shared/bot";
 import { BOT_STARTUP_COMMANDS, BOT_START, BOT_INFO, BOT_EXPORT_DB } from "@/1shared/bot/commands";
-import { thoughtsComposer, createThoughtsConversation, createAdviceConversation } from "@/2entities/thoughts";
+import { thankComposer, createThankConversation } from "@/2entities/thanks";
 import { anxietiesComposer, createAnxietyConversation } from "@/2entities/anxieties";
+import { thoughtsComposer, createThoughtsConversation, createAdviceConversation } from "@/2entities/thoughts";
 
 import { BOT_TEXT } from "./text";
 import { exportDatabase } from "./exportDatabase";
@@ -23,9 +24,11 @@ export function createBot(token: string) {
 
     bot.use(session({ initial: getInitialStore }));
     bot.use(conversations());
-    bot.use(createConversation(createThoughtsConversation));
+    bot.use(createConversation(createThankConversation));
     bot.use(createConversation(createAdviceConversation));
     bot.use(createConversation(createAnxietyConversation));
+    bot.use(createConversation(createThoughtsConversation));
+    bot.use(thankComposer);
     bot.use(thoughtsComposer);
     bot.use(anxietiesComposer);
     bot.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });

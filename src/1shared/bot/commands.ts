@@ -4,6 +4,7 @@ export const BOT_START: BotCommand = { command: "start", description: "Нача�
 export const BOT_INFO: BotCommand = { command: "info", description: "Что делает бот?" };
 
 export const BOT_CREATE_THOUGHT: BotCommand = { command: "create_thought", description: "Добавить мысль" };
+export const BOT_CREATE_THANK: BotCommand = { command: "create_thank", description: "Добавить благодарность" };
 export const BOT_CREATE_ADVICE: BotCommand = { command: "create_advice", description: "Переосмысль" };
 export const BOT_CREATE_ANXIETY: BotCommand = { command: "create_anxiety", description: "Добавь тревогу" };
 export const BOT_EXPORT_DB: BotCommand = { command: "export_db", description: "Экспортировать excel" };
@@ -12,6 +13,7 @@ export const BOT_STARTUP_COMMANDS: BotCommand[] = [
     BOT_START,
     BOT_INFO,
     BOT_CREATE_THOUGHT,
+    BOT_CREATE_THANK,
     BOT_CREATE_ADVICE,
     BOT_CREATE_ANXIETY,
     BOT_EXPORT_DB
