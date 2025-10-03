@@ -50,6 +50,13 @@
       "when": 1759052323585,
       "tag": "0006_sticky_phantom_reporter",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1759471195534,
+      "tag": "0007_swift_quicksilver",
+      "breakpoints": true
     }
   ]
 }

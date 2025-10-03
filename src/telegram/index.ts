@@ -4,6 +4,7 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import { BotContext, getInitialStore } from "@/1shared/bot";
 import { BOT_STARTUP_COMMANDS, BOT_START, BOT_INFO, BOT_EXPORT_DB } from "@/1shared/bot/commands";
 import { thoughtsComposer, createThoughtsConversation, createAdviceConversation } from "@/2entities/thoughts";
+import { anxietiesComposer, createAnxietyConversation } from "@/2entities/anxieties";
 
 import { BOT_TEXT } from "./text";
 import { exportDatabase } from "./exportDatabase";
@@ -24,15 +25,14 @@ export function createBot(token: string) {
     bot.use(conversations());
     bot.use(createConversation(createThoughtsConversation));
     bot.use(createConversation(createAdviceConversation));
+    bot.use(createConversation(createAnxietyConversation));
     bot.use(thoughtsComposer);
-
+    bot.use(anxietiesComposer);
     bot.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });
 
     bot.command([BOT_START.command, BOT_INFO.command], async (ctx) => {
-        await ctx.api.setMyCommands(BOT_STARTUP_COMMANDS, { scope: { type: "all_private_chats" } });
         await ctx.reply(BOT_TEXT.greeting)
     });
-
     bot.command(BOT_EXPORT_DB.command, exportDatabase);
 
     return bot;
