@@ -1,149 +1,87 @@
-# Telegram Mini Apps Next.js Template
+# CalculateIt - Психологический помощник в Telegram
 
-This template demonstrates how developers can implement a web application on the
-Telegram Mini Apps platform using the following technologies and libraries:
+**CalculateIt** - это Telegram бот с интегрированной Mini App (TMA)^[на этапе разработки], созданный для психологической поддержки и работы с тревожными состояниями. Проект помогает пользователям фиксировать, анализировать и управлять своими мыслями и переживаниями через структурированные диалоги.
 
-- [Next.js](https://nextjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [TON Connect](https://docs.ton.org/develop/dapps/ton-connect/overview)
-- [@telegram-apps SDK](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk/2-x)
-- [Telegram UI](https://github.com/Telegram-Mini-Apps/TelegramUI)
+## 🧠 Особенности и назначение
 
-> The template was created using [pnpm](https://pnpm.io/). Therefore, it is
-> required to use it for this project as well. Using other package managers, you
-> will receive a corresponding error.
+Проект предназначен для помощи в осознании и работе с тревожными мыслями через несколько ключевых функций:
 
-## Install Dependencies
+- **📝 Фиксация тревог** - запись тревожных мыслей
+- **💭 Анализ мыслей** - пересмотр мыслей в спокойном состоянии
+- **🙏 Практика благодарности** - фиксация позитивных моментов
+- **📊 Экспорт данных** - возможность выгрузки всех записей в Excel для самостоятельного анализа
 
-If you have just cloned this template, you should install the project
-dependencies using the command:
 
-```Bash
-pnpm install
-```
+## 🏗 Архитектура и технологии
 
-## Scripts
+### Технический стек
+- **Фронтенд**: Next.js 15.3 с App Router, React 18, TypeScript
+- **Telegram интеграция**: Grammy фреймворк, Telegram Mini Apps SDK
+- **База данных**: PostgreSQL + Drizzle ORM
+- **Хостинг**: Vercel (TMA + API routes)
 
-This project contains the following scripts:
+## ⚙️ Настройка окружения
 
-- `dev`. Runs the application in development mode.
-- `dev:https`. Runs the application in development mode using self-signed SSL
-  certificate.
-- `build`. Builds the application for production.
-- `start`. Starts the Next.js server in production mode.
-- `lint`. Runs [eslint](https://eslint.org/) to ensure the code quality meets
-  the required
-  standards.
+### Предварительные требования
+- Node.js 18+
+- Аккаунт Telegram с доступом к [BotFather](https://t.me/botfather)
+- [Vercel](https://vercel.com) аккаунт для хостинга бота с github репозитория
+- [Supabase](https://supabase.com) аккаунт для базы данных (можно создать аккаунт из supabase)
 
-To run a script, use the `pnpm run` command:
+### Локальная разработка
 
-```Bash
-pnpm run {script}
-# Example: pnpm run build
-```
-
-## Create Bot and Mini App
-
-Before you start, make sure you have already created a Telegram Bot. Here is
-a [comprehensive guide](https://docs.telegram-mini-apps.com/platform/creating-new-app)
-on how to do it.
-
-## Run
-
-Although Mini Apps are designed to be opened
-within [Telegram applications](https://docs.telegram-mini-apps.com/platform/about#supported-applications),
-you can still develop and test them outside of Telegram during the development
-process.
-
-To run the application in the development mode, use the `dev` script:
-
+1. **Клонирование и установка зависимостей**
 ```bash
-pnpm run dev
+git clone https://github.com/artemo8913/calculateIt.git
+cd calculateIt
+npm ci
 ```
 
-After this, you will see a similar message in your terminal:
+2. **Настройка переменных окружения**
+Создайте `.env.local` на основе `.env.example`:
 
+```env
+# File must name .env.local
+
+# Next.js
+VERCEL = "1"
+NEXTAUTH_URL = "https://your-app.vercel.app"
+NEXTAUTH_SECRET = "your_nextauth_secret"
+
+# Telegram
+TELEGRAM_BOT_TOKEN = "your_main_bot_token_from_bot_father"
+TELEGRAM_DEV_BOT_TOKEN = "your_dev_bot_token_from_bot_father"
+TELEGRAM_DEV_WEBHOOK_URL = "https://api.telegram.org/bot{telegram_bot_token}/setWebhook?url={vercel_url}/api/bot"
+
+# База данных
+DATABASE_URL = "db_connection_string_from_supabase"
+```
+
+3. **Запуск в режиме разработки**
 ```bash
-▲ Next.js 14.2.3
-- Local:        http://localhost:3000
-
-✓ Starting...
-✓ Ready in 2.9s
+# Запуск Next.js на localhost с HTTPS (для TMA) и бота с long polling
+npm run dev
 ```
+Проект использует [nextjs-template](https://github.com/Telegram-Mini-Apps/nextjs-template) с поддержкой самоподписанных SSL-сертификатов для локальной разработки TMA.
 
-To view the application, you need to open the `Local`
-link (`http://localhost:3000` in this example) in your browser.
+Можно запускать отдельно режим разработки бота и TMA:
+- **Бот**: long polling через `npm run dev:bot`
+- **TMA**: HTTPS-сервер через `npm run dev:https`
 
-It is important to note that some libraries in this template, such as
-`@telegram-apps/sdk`, are not intended for use outside of Telegram.
+### Продакшен-режим
 
-Nevertheless, they appear to function properly. This is because the
-`src/hooks/useTelegramMock.ts` file, which is imported in the application's
-`Root` component, employs the `mockTelegramEnv` function to simulate the
-Telegram environment. This trick convinces the application that it is
-running in a Telegram-based environment. Therefore, be cautious not to use this
-function in production mode unless you fully understand its implications.
+Бот в prod режиме работает с помощью API routes ([статья](https://www.launchfa.st/blog/telegram-nextjs-app-router))
 
-### Run Inside Telegram
+## 🔐 Безопасность и этические соображения
 
-Although it is possible to run the application outside of Telegram, it is
-recommended to develop it within Telegram for the most accurate representation
-of its real-world functionality.
+### Текущая ситуация с данными
+На данный момент данные хранятся в Supabase **без шифрования**. Как разработчик, я технически имею доступ к данным пользователей, что создает этическую дилемму для приложения, работающего с конфиденциальной психологической информацией. Поэтому рекомендую самостоятельно разворачивать проект со своей БД.
 
-To run the application inside Telegram, [@BotFather](https://t.me/botfather)
-requires an HTTPS link.
+## 🚀 Развертывание
 
-This template already provides a solution.
+### Стандартное развертывание на Vercel
+1. Создайте форк репозитория
+2. Подключите репозиторий к Vercel
+3. Настройте переменные окружения в панели Vercel
+4. Деплой автоматически запустится при пуше в main^[https://vercel.com/docs/git]
 
-To retrieve a link with the HTTPS protocol, consider using the `dev:https`
-script:
-
-```bash
-$ pnpm run dev:https
-
-▲ Next.js 14.2.3
-- Local:        https://localhost:3000
-
-✓ Starting...
-✓ Ready in 2.4s
-```
-
-Visiting the `Local` link (`https://localhost:3000` in this example) in your
-browser, you will see the following warning:
-
-![SSL Warning](assets/ssl-warning.png)
-
-This browser warning is normal and can be safely ignored as long as the site is
-secure. Click the `Proceed to localhost (unsafe)` button to continue and view
-the application.
-
-Once the application is displayed correctly, submit the
-link `https://127.0.0.1:3000` (`https://localhost:3000` is considered as invalid
-by BotFather) as the Mini App link to [@BotFather](https://t.me/botfather).
-Then, navigate to [https://web.telegram.org/k/](https://web.telegram.org/k/),
-find your bot, and launch the Telegram Mini App. This approach provides the full
-development experience.
-
-## Deploy
-
-The easiest way to deploy your Next.js app is to use
-the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
-
-Check out
-the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for
-more details.
-
-## Set the API Route as Telegram Bot Webhook
-
-To configure Telegram to invoke the `/api/bot` route to respond to user interactions with your bot, run the following command after updating it with your **Telegram Bot Token** and **Vercel Deployment URL**.
-
-```bash
-curl https://api.telegram.org/bot<telegram_bot_token>/setWebhook?url=https://<your-deployment.vercel>.app/api/bot
-```
-
-## Useful Links
-
-- [Platform documentation](https://docs.telegram-mini-apps.com/)
-- [@telegram-apps/sdk-react documentation](https://docs.telegram-mini-apps.com/packages/telegram-apps-sdk-react)
-- [Telegram developers community chat](https://t.me/devs)
